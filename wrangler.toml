@@ -1,0 +1,8 @@
+name = "pivo-app"
+compatibility_date = "2025-07-20"
+main = "src/index.ts"
+node_compat = true
+build.command = "npm run build"
+
+[site]
+bucket = "./dist"
