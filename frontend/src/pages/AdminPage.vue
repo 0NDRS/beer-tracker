@@ -108,11 +108,12 @@ import { ref, onMounted } from 'vue'
 
 type User = { id: string; name: string; totalBeer: number }
 
-const API_URL = 'http://localhost:3000';
+const API_BASE = "https://beer-tracker-backend.ondrazab2006.workers.dev";
+
 const users = ref<User[]>([]);
 
 const fetchUsers = async () => {
-  const res = await fetch(`${API_URL}/users`);
+  const res = await fetch(`${API_BASE}/api/users`);
   users.value = await res.json();
 };
 
@@ -122,11 +123,11 @@ const sessionHistory = ref<any[]>([])
 const expandedSessions = ref<string[]>([])
 
 const fetchBarrelSession = async () => {
-  const res = await fetch(`${API_URL}/barrel`)
+  const res = await fetch(`${API_BASE}/api/barrel`)
   currentSession.value = await res.json()
 }
 const fetchBarrelHistory = async () => {
-  const res = await fetch(`${API_URL}/barrel/history`)
+  const res = await fetch(`${API_BASE}/api/barrel/history`)
   let history = await res.json()
   // Remove duplicate open session if present
   if (history.length > 1 && history[0].open && history[1].open &&
@@ -138,7 +139,7 @@ const fetchBarrelHistory = async () => {
   sessionHistory.value = history
 }
 const startBarrelSession = async () => {
-  await fetch(`${API_URL}/barrel/start`, {
+  await fetch(`${API_BASE}/api/barrel/start`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(barrel.value)
@@ -188,7 +189,7 @@ const addBeerManually = async () => {
     ? parseBeerCodes(manualBeerCodes.value)
     : -parseBeerCodes(manualBeerCodes.value);
   if (!amount) return;
-  await fetch(`${API_URL}/beer`, {
+  await fetch(`${API_BASE}/beer`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userId: manualUserId.value, amount })
@@ -208,7 +209,7 @@ const manualUserId = ref('')
 const manualBeerAction = ref('add')
 const addUser = async () => {
   if (!newUserName.value) return;
-  await fetch(`${API_URL}/users`, {
+  await fetch(`${API_BASE}/users`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: newUserName.value })
@@ -218,7 +219,7 @@ const addUser = async () => {
 }
 
 const deleteUser = async (id: string) => {
-  await fetch(`${API_URL}/users/${id}`, { method: 'DELETE' });
+  await fetch(`${API_BASE}/api/users/${id}`, { method: 'DELETE' });
   await fetchUsers();
 }
 
@@ -242,7 +243,7 @@ const confirmStartBarrelSession = async () => {
 }
 
 const closeSession = async () => {
-  await fetch(`${API_URL}/barrel/close`, { method: 'POST' })
+  await fetch(`${API_BASE}/api/barrel/close`, { method: 'POST' })
   await fetchBarrelSession()
   await fetchBarrelHistory()
   await fetchUsers()

@@ -69,13 +69,13 @@ type User = {
 
 
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://beer-tracker-backend.ondrazab2006.workers.dev';
 const leaderboard = ref<User[]>([]);
 
 const currentSession = ref<{ open: boolean; name?: string } | null>(null);
 
 const fetchSession = async () => {
-  const res = await fetch(`${API_URL}/barrel`);
+  const res = await fetch(`${API_URL}/api/barrel`);
   if (res.ok) {
     currentSession.value = await res.json();
   } else {
@@ -84,7 +84,7 @@ const fetchSession = async () => {
 };
 
 const fetchLeaderboard = async () => {
-  const res = await fetch(`${API_URL}/leaderboard`);
+  const res = await fetch(`${API_URL}/api/leaderboard`);
   leaderboard.value = await res.json();
 };
 
